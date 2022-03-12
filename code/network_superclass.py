@@ -36,7 +36,7 @@ class SoftmaxNet(pl.LightningModule):
         pass
 
     def predict_proba(self, x):
-        return nn.Softmax(self(x))
+        return nn.Softmax()(self(x))
 
     def predict(self, x):
         return np.argmax(self.predict_proba(x))

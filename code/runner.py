@@ -42,3 +42,4 @@ def run(config, datapath, Dataloader, Model, logpath,
 
     # run
     trainer.fit(model, dataloader)
+    return model # return the trained model

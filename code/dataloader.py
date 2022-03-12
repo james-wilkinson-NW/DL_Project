@@ -165,7 +165,7 @@ class VoxDatasetFly(VoxDataset):
         return label, spec_tens.transpose(dim0=1, dim1=2)
 
 
-    def _pydctSDCT(self, idx, resize_method='padding'):
+    def _pydctSDCT(self, idx, resize_method='interpolation'):
         '''
         __getitem__ specialisation for using https://github.com/jonashaag/pydct short time cosine transform
         see docs on ._librosaMFCC for documentation on resize_method
@@ -212,7 +212,7 @@ class VoxDatasetFly(VoxDataset):
         return label, spec_tens.transpose(dim0=1, dim1=2)
 
 
-    def _librosaMFCC(self, idx, resize_method='padding'):
+    def _librosaMFCC(self, idx, resize_method='interpolation'):
         '''
         __getitem__ specialisation for using librosa's mfcc
         param: method: 'padding' or 'interpolation' -> to get output spectrogram to the correct dimensionality, we
@@ -263,7 +263,7 @@ class VoxDatasetFly(VoxDataset):
         return label, spec_tens.transpose(dim0=1, dim1=2)
 
 
-    def _librosaMEL(self, idx, resize_method='padding'):
+    def _librosaMEL(self, idx, resize_method='interpolation'):
         '''
         __getitem__ specialisation for using librosa's melspectrogram
         see docs on self._librosaMFCC for resize_method functionality
@@ -389,4 +389,24 @@ class VoxDataloader(pl.LightningDataModule):
 
 if __name__ == '__main__':
  _root = '/Users/jameswilkinson/Downloads/dev/wav3/'
- dataloader = VoxDataloader(_root, phase_map_file='phase_map_small.csv', batch_size=32)
+
+
+ import matplotlib.pyplot as plt
+ from matplotlib import figure
+ fig, axs = plt.subplots(1, 4)
+ fig.set_size_inches(10, 4)
+ axs = list(axs)
+ count = 0
+ for m in ['librosa.stft', 'librosa.mel', 'pydct.sdct', 'librosa.mfcc']:
+     dataloader = VoxDataloader(_root, phase_map_file='phase_map_small.csv', batch_size=32, fftmethod=m)
+     x = dataloader.train[0][1].squeeze(0).numpy().transpose().copy()
+
+     ax = axs.pop(0)
+     if count != 0:
+         #ax.axes.xaxis.set_visible(False)
+         ax.axes.yaxis.set_visible(False)
+     ax.imshow(x)
+     ax.title.set_text(m[m.find('.')+1:].upper())
+     count += 1
+
+ plt.show()

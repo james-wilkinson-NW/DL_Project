@@ -85,6 +85,29 @@ if __name__ == '__main__':
     model = VGGpool(num_classes=dataloader.num_classes(), lr=1e-3, optimizer='SGD')
 
     # give training a go
-    tb_logger = pl_loggers.TensorBoardLogger('../Logs/', name="TestRun")
-    trainer = pl.Trainer(logger=tb_logger, max_epochs=20, tpu_cores=None, gpus=None)
-    trainer.fit(model, dataloader)
+    #tb_logger = pl_loggers.TensorBoardLogger('../Logs/', name="TestRun")
+    #trainer = pl.Trainer(logger=tb_logger, max_epochs=20, tpu_cores=None, gpus=None)
+    #trainer.fit(model, dataloader)
+
+    print('in1')
+    X = []
+    Y = []
+    for i in range(len(dataloader.test)):
+        xs = dataloader.test[i][1].unsqueeze(0)
+        ys = dataloader.test[i][0]
+        X.append(xs)
+        Y.append(ys)
+
+    print('in2')
+
+    import torch
+    X = torch.cat(X)
+    labels  = torch.tensor(Y)
+    probs = model.predict_proba(X)
+
+    print('in3')
+    import metrics
+    topk = metrics.topk(probs, labels)
+    EER = metrics.EER_metric(probs, labels)
+
+    print('done')
