@@ -1,6 +1,8 @@
 import pytorch_lightning.loggers as pl_loggers
 from pytorch_lightning.callbacks import EarlyStopping
 import pytorch_lightning as pl
+import metrics
+import torch
 
 def run(config, datapath, Dataloader, Model, logpath,
   tpu_cores=None, gpu_cores=None, phase_map_file='phase_map.csv'):
@@ -42,4 +44,29 @@ def run(config, datapath, Dataloader, Model, logpath,
 
     # run
     trainer.fit(model, dataloader)
+
+    X = []
+    Y = []
+    for i in range(len(dataloader.test)):
+        xs = dataloader.test[i][1].unsqueeze(0)
+        ys = dataloader.test[i][0]
+        X.append(xs)
+        Y.append(ys)
+
+    X = torch.cat(X)
+    labels = torch.tensor(Y)
+    probs = model.predict_proba(X)
+
+    try:
+        topk = metrics.topk(probs, labels)
+        print("topK: {}".format(topk))
+    except:
+        print("TopK failed")
+
+    try:
+        EER = metrics.EER_metric(probs, labels)
+        print('EER: {}'.format(EER))
+    except:
+        print("EER failed")
+
     return model # return the trained model

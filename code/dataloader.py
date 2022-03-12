@@ -165,7 +165,7 @@ class VoxDatasetFly(VoxDataset):
         return label, spec_tens.transpose(dim0=1, dim1=2)
 
 
-    def _pydctSDCT(self, idx, resize_method='interpolation'):
+    def _pydctSDCT(self, idx, resize_method='padding'):
         '''
         __getitem__ specialisation for using https://github.com/jonashaag/pydct short time cosine transform
         see docs on ._librosaMFCC for documentation on resize_method
@@ -365,7 +365,7 @@ class VoxDatasetFly(VoxDataset):
 
 class VoxDataloader(pl.LightningDataModule):
 
- def __init__(self, path, num_workers=2, batch_size=32, phase_map_file='phase_map.csv', fftmethod='librosa.stft'):
+ def __init__(self, path, num_workers=8, batch_size=32, phase_map_file='phase_map.csv', fftmethod='librosa.stft'):
      super(VoxDataloader, self).__init__()
      self.num_workers = num_workers
      self.batch_size = batch_size
@@ -390,21 +390,5 @@ class VoxDataloader(pl.LightningDataModule):
 if __name__ == '__main__':
  _root = '/Users/jameswilkinson/Downloads/dev/wav3/'
 
-
- import matplotlib.pyplot as plt
- from matplotlib import figure
- fig, axs = plt.subplots(1, 1)
- count = 0
- for m in ['pydct.sdct']:
-     dataloader = VoxDataloader(_root, phase_map_file='phase_map_small.csv', batch_size=32, fftmethod=m)
-     x = dataloader.train[0][1].squeeze(0).numpy().transpose().copy()
-
-     ax = axs
-     if count != 0:
-         #ax.axes.xaxis.set_visible(False)
-         ax.axes.yaxis.set_visible(False)
-     ax.imshow(x)
-     ax.title.set_text("zero-padded DCT")
-     count += 1
-
- plt.show()
+ dataloader = VoxDataloader(_root, phase_map_file='phase_map_small.csv', batch_size=32, fftmethod='librosa.stft')
+ x = dataloader.train[0][1].squeeze(0).numpy().transpose().copy()
