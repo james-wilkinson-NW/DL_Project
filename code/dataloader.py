@@ -393,20 +393,18 @@ if __name__ == '__main__':
 
  import matplotlib.pyplot as plt
  from matplotlib import figure
- fig, axs = plt.subplots(1, 4)
- fig.set_size_inches(10, 4)
- axs = list(axs)
+ fig, axs = plt.subplots(1, 1)
  count = 0
- for m in ['librosa.stft', 'librosa.mel', 'pydct.sdct', 'librosa.mfcc']:
+ for m in ['pydct.sdct']:
      dataloader = VoxDataloader(_root, phase_map_file='phase_map_small.csv', batch_size=32, fftmethod=m)
      x = dataloader.train[0][1].squeeze(0).numpy().transpose().copy()
 
-     ax = axs.pop(0)
+     ax = axs
      if count != 0:
          #ax.axes.xaxis.set_visible(False)
          ax.axes.yaxis.set_visible(False)
      ax.imshow(x)
-     ax.title.set_text(m[m.find('.')+1:].upper())
+     ax.title.set_text("zero-padded DCT")
      count += 1
 
  plt.show()
