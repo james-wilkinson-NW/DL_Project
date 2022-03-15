@@ -1,11 +1,42 @@
 # DL_Project
 
+## Basic runthroughs
+
+The main models can be found in the following modules. Running each of these models will run the model on the dummy data included
+in this repo.
+
+1) VGGultramini.py -> our smallest CNN, which was used extensively but did not feature in the report.
+2) VGGmini.py -> our staple CNN, which is outlined in architecture 1 of the report.
+3) VGGpool.py -> our pooling CNN, which is outlined in architecture 2 of the report.
+4) VGGnet.py -> A spin on the deep-CNN (VGG-M) model produced by Oxford's VGG group.
+
+In order to run these models fully, data is required. For the sake of getting the models running, we have included a
+small portion of data (4 speaker IDs) in ./dataset/raw/.
+
+You can see the parameters on which spectrogram is generated come as arguments in the dataloader.
+
+## Bigger runthroughs
+
+Bigger runthroughs of the models can be performed (across multiple parameters, multiple runs etc) using the .ipynb files
+within this repo. EG: run_VGGmini.ipynb.
+
+You can see from the contents that we pass the hyperparameters to runner.py using a config dictionary.
+
+### Runner
+
+The runner.py module is a wrapper for easily running and logging models. The logging is automated, along with the naming
+conventions of logs.
+
+## Dataloaders
+
+We take advantage of the fast processing speed of the FFT (and equivalent algorithms) to produce spectrograms on the fly
+as the models train. This is demonstrated in the dataloader.py module. You can also see how this module reads data from disk
+using a pre-made csv file defining the training, validation and testing data. This is crucial, given the large dataset and our
+limited RAM.
 
 ## Preprocessing
 
-Preprocessing is executed by preprocessing.py, which contains a suite of functions for preprocessing.
-
-Key functions to be run (require no inputs) are:
+concerning preprocessing.py:
 
 ### Setup before preprocessing
 
@@ -45,13 +76,4 @@ files.
 
 Additional preprocessing steps can be included in this script. Eg: additional function to convert the wav files into
 a spectogram in a torch binary file format.
-
-## Dataloaders
-
-In dataloader2.py, we have a dataloader for the VOX dataset. It requires spectograms to be already computed, normalised,
-and stored at a given path. It also requires a "phase_map.csv" file to index the relevant files. Spectograms must be stored
-in pytorch's binary file format.
-
-
-
 

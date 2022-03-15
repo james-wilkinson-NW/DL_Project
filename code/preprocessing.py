@@ -401,7 +401,7 @@ if __name__ == '__main__':
     #sptpath = '/Users/devyanigauri/Documents/GitHub/DL_Project/dataset/spectrograms'
     #m4apath = os.path.normpath(os.getcwd()+os.sep+os.pardir+os.sep+os.pardir)+'/minidata/raw'
     #sptpath = os.path.normpath(os.getcwd()+os.sep+os.pardir+os.sep+os.pardir)+'/minidata/spectrograms'
-    m4apath = '/Users/jameswilkinson/Downloads/dev/wav2/'
+    m4apath = '../dataset/raw/'
     # m4apath = '../dataset/raw'
     # sptpath = '../dataset/spectrograms'
     # dataset_to_wav(m4apath, wavpath)

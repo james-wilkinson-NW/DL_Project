@@ -66,8 +66,8 @@ class VGGmini(SoftmaxNet):
 if __name__ == '__main__':
     # Load dataloader
     #dataloader = VoxDataloader('../dataset/raw/', batch_size=3)
-    dataloader = VoxDataloader('/Users/jameswilkinson/Downloads/dev/wav3/', batch_size=32, fftmethod='pydct.sdct',
-                               phase_map_file='phase_map_small.csv')
+    dataloader = VoxDataloader('../dataset/raw/', batch_size=32, fftmethod='pydct.sdct',
+                               phase_map_file='phase_map.csv')
 
     # Create model
     model = VGGmini(num_classes=4, lr=1e-3, optimizer='Adam')

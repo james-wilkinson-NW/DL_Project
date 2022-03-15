@@ -66,13 +66,13 @@ class VGGultramini(SoftmaxNet):
 if __name__ == '__main__':
     # Load dataloader
     #dataloader = VoxDataloader('../dataset/raw/', batch_size=3)
-    dataloader = VoxDataloader('/Users/jameswilkinson/Downloads/dev/aac/', batch_size=32, fftmethod='librosa.stft',
-                               phase_map_file='phase_map_40.csv')
+    dataloader = VoxDataloader('/Users/jameswilkinson/Downloads/dev/aac/', batch_size=32, fftmethod='librosa.mel',
+                               phase_map_file='phase_map_150.csv')
 
     # Create model
     model = VGGultramini(num_classes=dataloader.num_classes(), lr=1e-3, optimizer='Adam')
 
     # give training a go
-    tb_logger = pl_loggers.TensorBoardLogger('../VGGultramini/', name="STFT")
+    tb_logger = pl_loggers.TensorBoardLogger('../VGGultramini/', name="MEL")
     trainer = pl.Trainer(logger=tb_logger, max_epochs=20, tpu_cores=None, gpus=None)
     trainer.fit(model, dataloader)
